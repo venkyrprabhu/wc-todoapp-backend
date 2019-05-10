@@ -4,12 +4,16 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const hat = require('hat');
+const stubTodoListModel = require('./models/StubTodoListModel');
+const bodyParser = require('body-parser');
+const todoListService = require('./services/TodoListService')(hat);
 
 const indexRouter = require('./routes/IndexRoute')(express);
 const usersRouter = require('./routes/users');
 
 const app = express();
-
+const todoListRouter = require('./routes/TodoListRoute')(express, stubTodoListModel,todoListService);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -20,8 +24,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(bodyParser.json()); // support json encoded bodies
+//app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/list',todoListRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
