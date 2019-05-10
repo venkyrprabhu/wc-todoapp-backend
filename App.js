@@ -9,8 +9,7 @@ const stubTodoListModel = require('./models/StubTodoListModel');
 const bodyParser = require('body-parser');
 const todoListService = require('./services/TodoListService')(hat);
 
-const indexRouter = require('./routes/IndexRoute')(express);
-const usersRouter = require('./routes/users');
+
 
 const app = express();
 const todoListRouter = require('./routes/TodoListRoute')(express, stubTodoListModel,todoListService);
@@ -24,8 +23,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.json({ type: "*/*" })); // support json encoded bodies
 //app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
+
+
+const indexRouter = require('./routes/IndexRoute')(express);
+const usersRouter = require('./routes/users');
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -35,6 +39,8 @@ app.use('/list',todoListRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+
 
 // error handler
 app.use(function(err, req, res, next) {
