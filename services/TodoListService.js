@@ -7,6 +7,19 @@ function TodoListService(hat) {
         return callback(undefined, todoList);
     };
 
+     this.findAll = function FindAllTodo(callback){
+      return callback(undefined,todoLists);
+    };
+
+    this.findById = function findById(id, callback){
+      for(var i=0;i<todoLists.length;i++){
+        if(id === todoLists[i].id){
+          return callback(undefined,todoLists[i]);
+        }
+      }
+          return callback(undefined,undefined);
+    };
+
     return this;
 }
 
