@@ -9,7 +9,7 @@ function TodoListRoute(express, stubTodoListModel, todoListService) {
         var todoList = new stubTodoListModel(name, description);
         console.info("In Route : name = "+name+" ; description = "+description);
         // return res.status(201).send(todoListService.save(todoList));
-        todoListService.save(todoList, function(err, savedTodoList) {
+        todoListService.save(todoList, (err, savedTodoList) => {
             if(err) {
                 console.error(err);
                 return res.status(500).send();
@@ -21,7 +21,7 @@ function TodoListRoute(express, stubTodoListModel, todoListService) {
 
     router.get('/', function(req,res){
 
-      todoListService.findAll(function(err,todoLists){
+      todoListService.findAll((err,todoLists) => {
         if(err){
           console.error(err);
           return res.status(500).send();
@@ -32,7 +32,7 @@ function TodoListRoute(express, stubTodoListModel, todoListService) {
 
     router.get('/id/:todoListId', function (req,res){
        var id = req.params.todoListId;
-       todoListService.findById(id, function(err,todoList){
+       todoListService.findById(id, (err,todoList) => {
           if(err){
             console.error(err);
             return res.status(500).send();
